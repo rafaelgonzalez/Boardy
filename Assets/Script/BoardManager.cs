@@ -7,6 +7,7 @@ public class BoardManager : MonoBehaviour {
 
 	public GameObject floorObject;
     public GameObject wallObject;
+	public GameObject playerObject;
 
 	public int columns = 10;
 	public int rows = 10;
@@ -19,6 +20,8 @@ public class BoardManager : MonoBehaviour {
 
 		SetWallPositions();
 		PlaceWalls();
+
+		SpawnPlayer();
 	}
 
 	void CreateFloor() {
@@ -62,7 +65,18 @@ public class BoardManager : MonoBehaviour {
 		}
 	}
 
-	Vector3 RandomPosition() {
+	void SpawnPlayer() {
+		Vector3 position = RandomPosition();
+		position.y = 0.5f;
+		
+		while (wallPositions.Exists(e => e == position)) {
+			position = RandomPosition();
+		}
+
+		Instantiate(playerObject, position, Quaternion.identity);
+  }
+  
+  Vector3 RandomPosition() {
 		int randomX = Random.Range (2, rows - 2);
 		int randomZ = Random.Range (2, columns - 2);
 		
