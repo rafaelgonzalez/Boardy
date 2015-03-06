@@ -40,10 +40,10 @@ public class BoardManager : MonoBehaviour {
 		float width = rows / 2;
 		float height = columns / 2;
 
-		Vector3 northWallPosition = new Vector3(rows, 0.5f, height);
-		Vector3 southWalPosition = new Vector3(0, 0.5f, height);
-		Vector3 eastWallPosition = new Vector3(width, 0.5f, 0);
-		Vector3 westWallPosition = new Vector3(width, 0.5f, columns);
+		Vector3 northWallPosition = new Vector3(0, 0.5f, height);
+		Vector3 southWalPosition = new Vector3(rows, 0.5f, height);
+		Vector3 eastWallPosition = new Vector3(width, 0.5f, columns);
+		Vector3 westWallPosition = new Vector3(width, 0.5f, 0);
 
 		GameObject northWall = Instantiate(wallPrefab, northWallPosition, Quaternion.identity) as GameObject;
 		GameObject southWall = Instantiate(wallPrefab, southWalPosition, Quaternion.identity) as GameObject;
