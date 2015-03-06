@@ -30,9 +30,10 @@ public class BoardManager : MonoBehaviour {
 		Vector3 position = new Vector3(rows / 2, 0f, columns / 2);
 
 		Vector3 scale = new Vector3(rows / 10, 1, columns / 10);
-		floorPrefab.transform.localScale = scale;
 
-		Instantiate(floorPrefab, position, Quaternion.identity);
+		GameObject floorInstance = Instantiate(floorPrefab, position, Quaternion.identity) as GameObject;
+
+		floorInstance.transform.localScale = scale;
 	}
 
 	void PlaceOuterWalls() {
