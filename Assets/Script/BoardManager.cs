@@ -27,9 +27,9 @@ public class BoardManager : MonoBehaviour {
 	}
 
 	void CreateFloor() {
-		Vector3 position = new Vector3(rows / 2, 0f, columns / 2);
+		Vector3 position = new Vector3(rows / 2f, 0f, columns / 2f);
 
-		Vector3 scale = new Vector3(rows / 10, 1, columns / 10);
+		Vector3 scale = new Vector3(rows / 10f, 1f, columns / 10f);
 
 		GameObject floorInstance = Instantiate(floorPrefab, position, Quaternion.identity) as GameObject;
 
