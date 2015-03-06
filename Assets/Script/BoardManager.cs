@@ -5,7 +5,8 @@ using Random = UnityEngine.Random;
 
 public class BoardManager : MonoBehaviour {
 
-	public GameObject wallObject;
+	public GameObject floorObject;
+    public GameObject wallObject;
 
 	public int columns = 10;
 	public int rows = 10;
@@ -13,10 +14,20 @@ public class BoardManager : MonoBehaviour {
 	private List<Vector3> wallPositions = new List<Vector3>();
 
 	void Awake() {
+		CreateFloor();
 		PlaceBorderWalls();
 
 		SetWallPositions();
 		PlaceWalls();
+	}
+
+	void CreateFloor() {
+		Vector3 position = new Vector3(rows / 2, 0f, columns / 2);
+
+		Vector3 scale = new Vector3(rows / 10, 1, columns / 10);
+		floorObject.transform.localScale = scale;
+
+		Instantiate(floorObject, position, Quaternion.identity);
 	}
 
 	void PlaceBorderWalls() {
