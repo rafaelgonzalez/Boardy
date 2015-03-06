@@ -33,6 +33,7 @@ public class BoardManager : MonoBehaviour {
 
 		GameObject floorInstance = Instantiate(floorPrefab, position, Quaternion.identity) as GameObject;
 
+		floorInstance.name = "Floor";
 		floorInstance.transform.localScale = scale;
 	}
 
