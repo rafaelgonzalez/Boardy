@@ -7,11 +7,13 @@ public class PlayerMovement : MonoBehaviour {
 	public LayerMask blockingLayer;
 
 	private SphereCollider sphereCollider;
+	private Rigidbody rigidBody;
 	private float inverseMoveTime;
 	private bool disabledInput;
 
 	void Start () {
 		sphereCollider = gameObject.GetComponent<SphereCollider>();
+		rigidBody = gameObject.GetComponent<Rigidbody>();
 		inverseMoveTime = 1f / moveTime;
 		disabledInput = false;
 	}
@@ -67,9 +69,9 @@ public class PlayerMovement : MonoBehaviour {
 		float sqrRemainingDistance = (gameObject.transform.position - endPosition).sqrMagnitude;
 
 		while (sqrRemainingDistance > float.Epsilon) {
-			Vector3 newPosition = Vector3.MoveTowards(gameObject.transform.position, endPosition, inverseMoveTime * Time.deltaTime);
+			Vector3 newPosition = Vector3.MoveTowards(rigidBody.position, endPosition, inverseMoveTime * Time.deltaTime);
 
-			gameObject.transform.position = newPosition;
+			rigidBody.MovePosition(newPosition);
 
 			sqrRemainingDistance = (gameObject.transform.position - endPosition).sqrMagnitude;
 
