@@ -16,7 +16,7 @@ public class BoardManager : MonoBehaviour {
 
 	void Awake() {
 		CreateFloor();
-		PlaceBorderWalls();
+		PlaceOuterWalls();
 
 		SetWallPositions();
 		PlaceWalls();
@@ -33,16 +33,24 @@ public class BoardManager : MonoBehaviour {
 		Instantiate(floorObject, position, Quaternion.identity);
 	}
 
-	void PlaceBorderWalls() {
-		for (int x = 0; x <= rows; x++) {
-			for (int z = 0; z <= columns; z++) {
-				if (x == 0 || x == rows || z == 0 || z == columns) {
-					Vector3 position = new Vector3(x, 0.5f, z);
+	void PlaceOuterWalls() {
+		float width = rows / 2;
+		float height = columns / 2;
 
-					Instantiate(wallObject, position, Quaternion.identity);
-				}
-			}
-		}
+		Vector3 northWallPosition = new Vector3(rows, 0.5f, height);
+		Vector3 southWalPosition = new Vector3(0, 0.5f, height);
+		Vector3 eastWallPosition = new Vector3(width, 0.5f, 0);
+		Vector3 westWallPosition = new Vector3(width, 0.5f, columns);
+
+		GameObject northWall = Instantiate(wallObject, northWallPosition, Quaternion.identity) as GameObject;
+		GameObject southWall = Instantiate(wallObject, southWalPosition, Quaternion.identity) as GameObject;
+		GameObject eastWall = Instantiate(wallObject, eastWallPosition, Quaternion.identity) as GameObject;
+		GameObject westWall = Instantiate(wallObject, westWallPosition, Quaternion.identity) as GameObject;
+
+		northWall.transform.localScale = new Vector3(1, 1, columns);
+		southWall.transform.localScale = new Vector3(1, 1, columns);
+		eastWall.transform.localScale = new Vector3(rows, 1, 1);
+		westWall.transform.localScale = new Vector3(rows, 1, 1);
 	}
 	
 	void SetWallPositions() {	
