@@ -8,10 +8,12 @@ public class PlayerMovement : MonoBehaviour {
 
 	private SphereCollider sphereCollider;
 	private float inverseMoveTime;
+	private bool disabledInput;
 
 	void Start () {
 		sphereCollider = gameObject.GetComponent<SphereCollider>();
 		inverseMoveTime = 1f / moveTime;
+		disabledInput = false;
 	}
 	
 	void Update () {
@@ -37,6 +39,9 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	void Move(int horizontal, int vertical) {
+		if (disabledInput == true)
+			return;
+
 		Vector3 movement = new Vector3 (horizontal, 0.0f, vertical);
 		Vector3 startPosition = gameObject.transform.position;
 		Vector3 endPosition = startPosition + movement;
@@ -57,6 +62,8 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	IEnumerator SmoothMovement (Vector3 endPosition) {
+		disabledInput = true;
+
 		float sqrRemainingDistance = (gameObject.transform.position - endPosition).sqrMagnitude;
 
 		while (sqrRemainingDistance > float.Epsilon) {
@@ -68,5 +75,7 @@ public class PlayerMovement : MonoBehaviour {
 
 			yield return null;
 		}
+
+		disabledInput = false;
 	}
 }
