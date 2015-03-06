@@ -4,10 +4,10 @@ using Random = UnityEngine.Random;
 
 public class BoardManager : MonoBehaviour {
 
-	public GameObject floorObject;
-    public GameObject wallObject;
-	public GameObject playerObject;
-	public GameObject cameraObject;
+	public GameObject floorPrefab;
+    public GameObject wallPrefab;
+	public GameObject playerPrefab;
+	public GameObject cameraPrefab;
 
 	public int columns = 10;
 	public int rows = 10;
@@ -30,9 +30,9 @@ public class BoardManager : MonoBehaviour {
 		Vector3 position = new Vector3(rows / 2, 0f, columns / 2);
 
 		Vector3 scale = new Vector3(rows / 10, 1, columns / 10);
-		floorObject.transform.localScale = scale;
+		floorPrefab.transform.localScale = scale;
 
-		Instantiate(floorObject, position, Quaternion.identity);
+		Instantiate(floorPrefab, position, Quaternion.identity);
 	}
 
 	void PlaceOuterWalls() {
@@ -44,10 +44,10 @@ public class BoardManager : MonoBehaviour {
 		Vector3 eastWallPosition = new Vector3(width, 0.5f, 0);
 		Vector3 westWallPosition = new Vector3(width, 0.5f, columns);
 
-		GameObject northWall = Instantiate(wallObject, northWallPosition, Quaternion.identity) as GameObject;
-		GameObject southWall = Instantiate(wallObject, southWalPosition, Quaternion.identity) as GameObject;
-		GameObject eastWall = Instantiate(wallObject, eastWallPosition, Quaternion.identity) as GameObject;
-		GameObject westWall = Instantiate(wallObject, westWallPosition, Quaternion.identity) as GameObject;
+		GameObject northWall = Instantiate(wallPrefab, northWallPosition, Quaternion.identity) as GameObject;
+		GameObject southWall = Instantiate(wallPrefab, southWalPosition, Quaternion.identity) as GameObject;
+		GameObject eastWall = Instantiate(wallPrefab, eastWallPosition, Quaternion.identity) as GameObject;
+		GameObject westWall = Instantiate(wallPrefab, westWallPosition, Quaternion.identity) as GameObject;
 
 		northWall.transform.localScale = new Vector3(1, 1, columns);
 		southWall.transform.localScale = new Vector3(1, 1, columns);
@@ -67,18 +67,18 @@ public class BoardManager : MonoBehaviour {
 
  	void PlaceWalls() {
 		for (int i = 0; i < wallPositions.Count; i++) {
-			Instantiate(wallObject, wallPositions[i], Quaternion.identity);
+			Instantiate(wallPrefab, wallPositions[i], Quaternion.identity);
 		}
 	}
 
 	void SpawnPlayer() {
 		Vector3 position = RandomAvailablePosition();
 
-		playerInstance = Instantiate(playerObject, position, Quaternion.identity) as GameObject;
+		playerInstance = Instantiate(playerPrefab, position, Quaternion.identity) as GameObject;
   	}
   
 	void SetCamera() {
-		GameObject camera = Instantiate(cameraObject, playerInstance.transform.position, Quaternion.identity) as GameObject;
+		GameObject camera = Instantiate(cameraPrefab, playerInstance.transform.position, Quaternion.identity) as GameObject;
 		camera.transform.parent = playerInstance.transform;
 
 		Vector3 movement = new Vector3(0, 7, -7);
