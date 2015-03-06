@@ -49,11 +49,7 @@ public class BoardManager : MonoBehaviour {
 		int numberOfWalls = (int) ((columns + rows) / 2);
 
 		for (int i = 0; i < numberOfWalls; i++) {
-			Vector3 position = RandomPosition();
-
-			while (wallPositions.Exists(e => e == position)) {
-		        position = RandomPosition();
-			}
+			Vector3 position = RandomAvailablePosition();
 
 			wallPositions.Add(position);
 		}
@@ -66,16 +62,22 @@ public class BoardManager : MonoBehaviour {
 	}
 
 	void SpawnPlayer() {
+		Vector3 position = RandomAvailablePosition();
+
+		Instantiate(playerObject, position, Quaternion.identity);
+  	}
+  
+	Vector3 RandomAvailablePosition() {
 		Vector3 position = RandomPosition();
 
 		while (wallPositions.Exists(e => e == position)) {
 			position = RandomPosition();
-		}
+	    }
 
-		Instantiate(playerObject, position, Quaternion.identity);
-  }
-  
-  Vector3 RandomPosition() {
+		return position;
+	  }
+
+ 	Vector3 RandomPosition() {
 		int randomX = Random.Range (2, rows - 2);
 		int randomZ = Random.Range (2, columns - 2);
 		
