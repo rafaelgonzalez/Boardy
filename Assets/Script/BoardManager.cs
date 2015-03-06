@@ -7,11 +7,13 @@ public class BoardManager : MonoBehaviour {
 	public GameObject floorObject;
     public GameObject wallObject;
 	public GameObject playerObject;
+	public GameObject cameraObject;
 
 	public int columns = 10;
 	public int rows = 10;
 
 	private List<Vector3> wallPositions = new List<Vector3>();
+	private GameObject playerInstance;
 
 	void Awake() {
 		CreateFloor();
@@ -21,6 +23,7 @@ public class BoardManager : MonoBehaviour {
 		PlaceWalls();
 
 		SpawnPlayer();
+		SetCamera();
 	}
 
 	void CreateFloor() {
@@ -71,9 +74,21 @@ public class BoardManager : MonoBehaviour {
 	void SpawnPlayer() {
 		Vector3 position = RandomAvailablePosition();
 
-		Instantiate(playerObject, position, Quaternion.identity);
+		playerInstance = Instantiate(playerObject, position, Quaternion.identity) as GameObject;
   	}
   
+	void SetCamera() {
+		GameObject camera = Instantiate(cameraObject, playerInstance.transform.position, Quaternion.identity) as GameObject;
+		camera.transform.parent = playerInstance.transform;
+
+		Vector3 movement = new Vector3(0, 7, -7);
+		camera.transform.Translate(movement);
+
+		Vector3 lookDirection = playerInstance.transform.position - camera.transform.position;
+		Quaternion rotation = Quaternion.LookRotation(lookDirection);
+		camera.transform.rotation = rotation;
+	}
+
 	Vector3 RandomAvailablePosition() {
 		Vector3 position = RandomPosition();
 
