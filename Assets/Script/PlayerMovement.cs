@@ -3,8 +3,12 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
 
-	// Use this for initialization
+	public LayerMask blockingLayer;
+
+	private SphereCollider sphereCollider;
+
 	void Start () {
+		sphereCollider = gameObject.GetComponent<SphereCollider>();
 	}
 	
 	void Update () {
@@ -25,9 +29,28 @@ public class PlayerMovement : MonoBehaviour {
 		}
 
 		if (horizontal != 0 || vertical != 0) {
-			Vector3 movement = new Vector3 (horizontal, 0.0f, vertical);
-
-			gameObject.transform.Translate(movement);
+			Move(horizontal, vertical);
 		}
 	}
+
+	void Move(int horizontal, int vertical) {
+		Vector3 movement = new Vector3 (horizontal, 0.0f, vertical);
+
+		if (CanMove(movement))
+			gameObject.transform.Translate(movement);
+	}
+
+	bool CanMove(Vector3 movement) {
+		Vector3 startPosition = gameObject.transform.position;
+		Vector3 endPosition = startPosition + movement;
+
+		sphereCollider.enabled = false;
+
+		bool hit = Physics.Linecast(startPosition, endPosition, blockingLayer);
+
+		sphereCollider.enabled = true;
+
+		return !hit;
+	}
+
 }
