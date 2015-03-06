@@ -54,6 +54,11 @@ public class BoardManager : MonoBehaviour {
 		southWall.transform.localScale = new Vector3(1, 1, columns);
 		eastWall.transform.localScale = new Vector3(rows, 1, 1);
 		westWall.transform.localScale = new Vector3(rows, 1, 1);
+
+		northWall.name = "North Wall";
+		southWall.name = "South Wall";
+		eastWall.name = "East Wall";
+		westWall.name = "West Wall";
 	}
 	
 	void SetWallPositions() {	
