@@ -12,8 +12,11 @@ public class BoardManager : MonoBehaviour {
 	public int columns = 10;
 	public int rows = 10;
 
+	public int numberOfPlayerCharacters = 5;
+
 	private List<Vector3> wallPositions = new List<Vector3>();
-	private GameObject playerInstance;
+	private List<GameObject> playerCharacters = new List<GameObject>();
+	private GameObject camera;
 
 	void Awake() {
 		CreateFloor();
@@ -22,7 +25,7 @@ public class BoardManager : MonoBehaviour {
 		SetWallPositions();
 		PlaceWalls();
 
-		SpawnPlayer();
+		SpawnPlayerCharacters();
 		SetCamera();
 	}
 
@@ -62,7 +65,7 @@ public class BoardManager : MonoBehaviour {
 		westWall.name = "West Wall";
 	}
 	
-	void SetWallPositions() {	
+	void SetWallPositions() {
 		int numberOfWalls = (int) ((columns + rows) / 2);
 
 		for (int i = 0; i < numberOfWalls; i++) {
@@ -78,20 +81,24 @@ public class BoardManager : MonoBehaviour {
 		}
 	}
 
-	void SpawnPlayer() {
-		Vector3 position = RandomAvailablePosition();
+	void SpawnPlayerCharacters() {
+		for (int i = 0; i < numberOfPlayerCharacters; i++) {
+			Vector3 position = RandomAvailablePosition();
 
-		playerInstance = Instantiate(playerPrefab, position, Quaternion.identity) as GameObject;
+			GameObject character = Instantiate(playerPrefab, position, Quaternion.identity) as GameObject;
+
+			playerCharacters.Add(character);
+		}
   	}
   
 	void SetCamera() {
-		GameObject camera = Instantiate(cameraPrefab, playerInstance.transform.position, Quaternion.identity) as GameObject;
-		camera.transform.parent = playerInstance.transform;
+		GameObject camera = Instantiate(cameraPrefab, playerCharacters[0].transform.position, Quaternion.identity) as GameObject;
+		camera.transform.parent = playerCharacters[0].transform;
 
 		Vector3 movement = new Vector3(0, 7, -7);
 		camera.transform.Translate(movement);
 
-		Vector3 lookDirection = playerInstance.transform.position - camera.transform.position;
+		Vector3 lookDirection = playerCharacters[0].transform.position - camera.transform.position;
 		Quaternion rotation = Quaternion.LookRotation(lookDirection);
 		camera.transform.rotation = rotation;
 	}
