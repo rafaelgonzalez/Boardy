@@ -17,6 +17,7 @@ public class BoardManager : MonoBehaviour {
 	private List<Vector3> wallPositions = new List<Vector3>();
 	private List<GameObject> playerCharacters = new List<GameObject>();
 	private GameObject camera;
+	private int cameraFocusIndex = 0;
 
 	void Awake() {
 		CreateFloor();
@@ -26,7 +27,23 @@ public class BoardManager : MonoBehaviour {
 		PlaceWalls();
 
 		SpawnPlayerCharacters();
-		SetCamera();
+
+		camera = Instantiate(cameraPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+
+		SnapCameraToCharacter(playerCharacters[cameraFocusIndex]);
+	}
+
+	void Update() {
+		if (Input.GetKeyDown(KeyCode.Tab)) {
+			GameObject currentPlayer = playerCharacters[cameraFocusIndex];
+
+			cameraFocusIndex = cameraFocusIndex + 1;
+			if (cameraFocusIndex >= playerCharacters.Count) {
+				cameraFocusIndex = 0;
+			}
+
+			SnapCameraToCharacter(playerCharacters[cameraFocusIndex]);
+		}
 	}
 
 	void CreateFloor() {
@@ -91,14 +108,16 @@ public class BoardManager : MonoBehaviour {
 		}
   	}
   
-	void SetCamera() {
-		GameObject camera = Instantiate(cameraPrefab, playerCharacters[0].transform.position, Quaternion.identity) as GameObject;
-		camera.transform.parent = playerCharacters[0].transform;
+	void SnapCameraToCharacter(GameObject character) {
+		camera.transform.position = character.transform.position;
+		camera.transform.rotation = Quaternion.identity;
+
+		camera.transform.parent = character.transform;
 
 		Vector3 movement = new Vector3(0, 7, -7);
 		camera.transform.Translate(movement);
 
-		Vector3 lookDirection = playerCharacters[0].transform.position - camera.transform.position;
+		Vector3 lookDirection = character.transform.position - camera.transform.position;
 		Quaternion rotation = Quaternion.LookRotation(lookDirection);
 		camera.transform.rotation = rotation;
 	}
