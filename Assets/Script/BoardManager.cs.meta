@@ -1,10 +1,14 @@
 fileFormatVersion: 2
 guid: 5caf5619bf69c4585a8876bd665aa861
-timeCreated: 1425627984
+timeCreated: 1425704861
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - floorPrefab: {fileID: 102784, guid: 7c4f94d53dc87413ea4a33cde9a2a552, type: 2}
+  - wallPrefab: {fileID: 182574, guid: 2ffe45f29a874424f8860cc5ab1e1cff, type: 2}
+  - playerPrefab: {fileID: 199358, guid: 9a9005ccadd964fd081e0b0f29929fd3, type: 2}
+  - cameraPrefab: {fileID: 179886, guid: 8787993b49d3e4a35944c13a89fa958b, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
