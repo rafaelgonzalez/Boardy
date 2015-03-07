@@ -9,13 +9,13 @@ public class PlayerMovement : MonoBehaviour {
 	private SphereCollider sphereCollider;
 	private Rigidbody rigidBody;
 	private float inverseMoveTime;
-	private bool disabledInput;
+	private bool isMoving;
 
 	void Start () {
 		sphereCollider = gameObject.GetComponent<SphereCollider>();
 		rigidBody = gameObject.GetComponent<Rigidbody>();
 		inverseMoveTime = 1f / moveTime;
-		disabledInput = false;
+		isMoving = false;
 	}
 	
 	void Update () {
@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	void Move(int horizontal, int vertical) {
-		if (disabledInput == true)
+		if (isMoving == true)
 			return;
 
 		Vector3 movement = new Vector3 (horizontal, 0.0f, vertical);
@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	IEnumerator SmoothMovement (Vector3 endPosition) {
-		disabledInput = true;
+		isMoving = true;
 
 		float sqrRemainingDistance = (rigidBody.position - endPosition).sqrMagnitude;
 
@@ -78,6 +78,6 @@ public class PlayerMovement : MonoBehaviour {
 			yield return null;
 		}
 
-		disabledInput = false;
+		isMoving = false;
 	}
 }
