@@ -9,13 +9,13 @@ public class PlayerMovement : MonoBehaviour {
 	private SphereCollider sphereCollider;
 	private Rigidbody rigidBody;
 	private float inverseMoveTime;
-	private bool isMoving;
+	private bool isMoving = false;
+	private Vector3 destination;
 
 	void Start () {
-		sphereCollider = gameObject.GetComponent<SphereCollider>();
-		rigidBody = gameObject.GetComponent<Rigidbody>();
+		sphereCollider = GetComponent<SphereCollider>();
+		rigidBody = GetComponent<Rigidbody>();
 		inverseMoveTime = 1f / moveTime;
-		isMoving = false;
 	}
 	
 	void Update () {
@@ -45,35 +45,34 @@ public class PlayerMovement : MonoBehaviour {
 			return;
 
 		Vector3 movement = new Vector3 (horizontal, 0.0f, vertical);
-		Vector3 startPosition = rigidBody.position;
-		Vector3 endPosition = startPosition + movement;
+		destination = rigidBody.position + movement;
 
-		if (CanMove(startPosition, endPosition)) {
-			StartCoroutine (SmoothMovement (endPosition));
+		if (CanMove()) {
+			StartCoroutine (SmoothMovement ());
 		}
 	}
 
-	bool CanMove(Vector3 startPosition, Vector3 endPosition) {
+	bool CanMove() {
 		sphereCollider.enabled = false;
 
-		bool hit = Physics.Linecast(startPosition, endPosition, blockingLayer);
+		bool hit = Physics.Linecast(rigidBody.position, destination, blockingLayer);
 
 		sphereCollider.enabled = true;
 
 		return !hit;
 	}
 
-	IEnumerator SmoothMovement (Vector3 endPosition) {
+	IEnumerator SmoothMovement () {
 		isMoving = true;
 
-		float sqrRemainingDistance = (rigidBody.position - endPosition).sqrMagnitude;
+		float sqrRemainingDistance = (rigidBody.position - destination).sqrMagnitude;
 
 		while (sqrRemainingDistance > float.Epsilon) {
-			Vector3 newPosition = Vector3.MoveTowards(rigidBody.position, endPosition, inverseMoveTime * Time.deltaTime);
+			Vector3 newPosition = Vector3.MoveTowards(rigidBody.position, destination, inverseMoveTime * Time.deltaTime);
 
 			rigidBody.MovePosition(newPosition);
 
-			sqrRemainingDistance = (rigidBody.position - endPosition).sqrMagnitude;
+			sqrRemainingDistance = (rigidBody.position - destination).sqrMagnitude;
 
 			yield return null;
 		}
