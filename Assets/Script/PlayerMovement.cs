@@ -22,13 +22,13 @@ public class PlayerMovement : MonoBehaviour {
 		int horizontal = 0;
 		int vertical = 0;
 
-		if (Input.GetKeyDown(KeyCode.Z))
+		if (Input.GetKey(KeyCode.Z))
 			vertical = 1;
-		else if (Input.GetKeyDown(KeyCode.S))
+		else if (Input.GetKey(KeyCode.S))
 			vertical = -1;
-		else if (Input.GetKeyDown(KeyCode.D))
+		else if (Input.GetKey(KeyCode.D))
 			horizontal = 1;
-		else if (Input.GetKeyDown(KeyCode.Q))
+		else if (Input.GetKey(KeyCode.Q))
 			horizontal = -1;
 
 		if (horizontal != 0) {
