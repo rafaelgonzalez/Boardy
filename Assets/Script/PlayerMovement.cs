@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour {
 			return;
 
 		Vector3 movement = new Vector3 (horizontal, 0.0f, vertical);
-		Vector3 startPosition = gameObject.transform.position;
+		Vector3 startPosition = rigidBody.position;
 		Vector3 endPosition = startPosition + movement;
 
 		if (CanMove(startPosition, endPosition)) {
@@ -66,14 +66,14 @@ public class PlayerMovement : MonoBehaviour {
 	IEnumerator SmoothMovement (Vector3 endPosition) {
 		disabledInput = true;
 
-		float sqrRemainingDistance = (gameObject.transform.position - endPosition).sqrMagnitude;
+		float sqrRemainingDistance = (rigidBody.position - endPosition).sqrMagnitude;
 
 		while (sqrRemainingDistance > float.Epsilon) {
 			Vector3 newPosition = Vector3.MoveTowards(rigidBody.position, endPosition, inverseMoveTime * Time.deltaTime);
 
 			rigidBody.MovePosition(newPosition);
 
-			sqrRemainingDistance = (gameObject.transform.position - endPosition).sqrMagnitude;
+			sqrRemainingDistance = (rigidBody.position - endPosition).sqrMagnitude;
 
 			yield return null;
 		}
