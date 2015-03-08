@@ -21,9 +21,10 @@ public class CameraMovement : MonoBehaviour {
 
 	void Update () {
 		if (!isMoving) {
-			if (Input.GetKeyDown(KeyCode.Tab)) {
+			if (Input.GetKeyDown(KeyCode.Tab))
 				ChangeCharacterFocus(1);
-			}
+			else if (Input.GetKeyDown(KeyCode.LeftShift))
+				ChangeCharacterFocus(-1);
 		}
 	}
 
