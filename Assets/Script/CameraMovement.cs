@@ -53,21 +53,21 @@ public class CameraMovement : MonoBehaviour {
 	private void SnapToCharacter(GameObject oldCharacter, GameObject newCharacter) {
 		transform.parent = newCharacter.transform;
 
-		Vector3 endPosition = Vector3.zero + newCharacter.transform.position + relativePosition;
-
-		StartCoroutine (SmoothMovement (endPosition));
+		StartCoroutine (SmoothMovement (newCharacter));
 	}
 
-	IEnumerator SmoothMovement (Vector3 destination) {
+	IEnumerator SmoothMovement (GameObject character) {
 		isMoving = true;
-		
+
+		Vector3 destination = Vector3.zero + character.transform.position + relativePosition;
 		float sqrRemainingDistance = (transform.position - destination).sqrMagnitude;
 		
 		while (sqrRemainingDistance > 0.1f) {
 			Vector3 newPosition = Vector3.Lerp(transform.position, destination, Time.deltaTime * moveSpeed);
 			
 			transform.position = newPosition;
-			
+
+			destination = Vector3.zero + character.transform.position + relativePosition;
 			sqrRemainingDistance = (transform.position - destination).sqrMagnitude;
 			
 			yield return null;
