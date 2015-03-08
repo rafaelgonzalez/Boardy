@@ -3,20 +3,27 @@ using System.Collections;
 
 public class CameraMovement : MonoBehaviour {
 
+	public float moveSpeed = 0.01f;
 	public Vector3 relativePosition = new Vector3(0, 7, -7);
 
 	private int cameraFocusIndex = 0;
 	private BoardManager boardManager;
+	private bool isMoving = false;
+	private float inverseMoveSpeed;
 
 	void Start () {
+		inverseMoveSpeed = 1f / moveSpeed;
+
 		boardManager = transform.parent.GetComponent<BoardManager>();
 
 		SetInitialPosition();
 	}
 
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.Tab)) {
-			ChangeCharacterFocus(1);
+		if (!isMoving) {
+			if (Input.GetKeyDown(KeyCode.Tab)) {
+				ChangeCharacterFocus(1);
+			}
 		}
 	}
 
@@ -49,7 +56,26 @@ public class CameraMovement : MonoBehaviour {
 		transform.parent = newCharacter.transform;
 
 		Vector3 endPosition = Vector3.zero + newCharacter.transform.position + relativePosition;
-		transform.position = endPosition;
+
+		StartCoroutine (SmoothMovement (endPosition));
+	}
+
+	IEnumerator SmoothMovement (Vector3 destination) {
+		isMoving = true;
+		
+		float sqrRemainingDistance = (transform.position - destination).sqrMagnitude;
+		
+		while (sqrRemainingDistance > float.Epsilon) {
+			Vector3 newPosition = Vector3.MoveTowards(transform.position, destination, inverseMoveSpeed * Time.deltaTime);
+			
+			transform.position = newPosition;
+			
+			sqrRemainingDistance = (transform.position - destination).sqrMagnitude;
+			
+			yield return null;
+		}
+		
+		isMoving = false;
 	}
 
 	private GameObject CurrentCharacter() {
