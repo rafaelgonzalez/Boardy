@@ -3,17 +3,14 @@ using System.Collections;
 
 public class CameraMovement : MonoBehaviour {
 
-	public float moveSpeed = 0.01f;
+	public float moveSpeed = 5.0f;
 	public Vector3 relativePosition = new Vector3(0, 7, -7);
 
 	private int cameraFocusIndex = 0;
 	private BoardManager boardManager;
 	private bool isMoving = false;
-	private float inverseMoveSpeed;
 
 	void Start () {
-		inverseMoveSpeed = 1f / moveSpeed;
-
 		boardManager = transform.parent.GetComponent<BoardManager>();
 
 		SetInitialPosition();
@@ -66,8 +63,8 @@ public class CameraMovement : MonoBehaviour {
 		
 		float sqrRemainingDistance = (transform.position - destination).sqrMagnitude;
 		
-		while (sqrRemainingDistance > float.Epsilon) {
-			Vector3 newPosition = Vector3.MoveTowards(transform.position, destination, inverseMoveSpeed * Time.deltaTime);
+		while (sqrRemainingDistance > 0.1f) {
+			Vector3 newPosition = Vector3.Lerp(transform.position, destination, Time.deltaTime * moveSpeed);
 			
 			transform.position = newPosition;
 			
