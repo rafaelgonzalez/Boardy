@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour {
 	private float inverseMoveTime;
 	private bool isMoving = false;
 	private Vector3 destination;
+	private bool isFocused = false;
 
 	void Start () {
 		sphereCollider = GetComponent<SphereCollider>();
@@ -19,24 +20,26 @@ public class PlayerMovement : MonoBehaviour {
 	}
 	
 	void Update () {
-		int horizontal = 0;
-		int vertical = 0;
+		if (isFocused) {
+			int horizontal = 0;
+			int vertical = 0;
 
-		if (Input.GetKey(KeyCode.Z))
-			vertical = 1;
-		else if (Input.GetKey(KeyCode.S))
-			vertical = -1;
-		else if (Input.GetKey(KeyCode.D))
-			horizontal = 1;
-		else if (Input.GetKey(KeyCode.Q))
-			horizontal = -1;
+			if (Input.GetKey(KeyCode.Z))
+				vertical = 1;
+			else if (Input.GetKey(KeyCode.S))
+				vertical = -1;
+			else if (Input.GetKey(KeyCode.D))
+				horizontal = 1;
+			else if (Input.GetKey(KeyCode.Q))
+				horizontal = -1;
 
-		if (horizontal != 0) {
-			vertical = 0;
-		}
+			if (horizontal != 0) {
+				vertical = 0;
+			}
 
-		if (horizontal != 0 || vertical != 0) {
-			Move(horizontal, vertical);
+			if (horizontal != 0 || vertical != 0) {
+				Move(horizontal, vertical);
+			}
 		}
 	}
 
@@ -78,5 +81,9 @@ public class PlayerMovement : MonoBehaviour {
 		}
 
 		isMoving = false;
+	}
+
+	public void setFocus(bool focus) {
+		isFocused = focus;
 	}
 }

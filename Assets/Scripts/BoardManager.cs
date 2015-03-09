@@ -100,6 +100,8 @@ public class BoardManager : MonoBehaviour {
 
 			playerCharacters.Add(character);
 		}
+
+		FocusedCharacter().GetComponent<PlayerMovement>().setFocus(true);
   	}
 
 	Vector3 RandomAvailablePosition() {
@@ -122,12 +124,16 @@ public class BoardManager : MonoBehaviour {
 	}
 
 	void IterateCharacterFocus (int indexIteration) {
+		FocusedCharacter().GetComponent<PlayerMovement>().setFocus(false);
+
 		characterFocusIndex = characterFocusIndex + indexIteration;
 		
 		if (characterFocusIndex >= playerCharacters.Count)
 			characterFocusIndex = 0;
 		else if (characterFocusIndex < 0)
-			characterFocusIndex = playerCharacters.Count - 1;		
+			characterFocusIndex = playerCharacters.Count - 1;
+
+		FocusedCharacter().GetComponent<PlayerMovement>().setFocus(true);
 	}
 
 	public GameObject FocusedCharacter() {
