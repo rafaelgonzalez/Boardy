@@ -18,7 +18,6 @@ public class BoardManager : MonoBehaviour {
 
 	private List<Vector3> wallPositions = new List<Vector3>();
 
-	private CameraMovement cameraMovement;
 	private int characterFocusIndex = 0;
 
 	void Awake() {
@@ -32,8 +31,6 @@ public class BoardManager : MonoBehaviour {
 
 		GameObject camera = Instantiate(cameraPrefab, Vector3.zero, Quaternion.identity) as GameObject;
 		camera.transform.parent = transform;
-
-		cameraMovement = camera.GetComponent<CameraMovement>();
 	}
 
 	void Update() {
@@ -125,17 +122,12 @@ public class BoardManager : MonoBehaviour {
 	}
 
 	void IterateCharacterFocus (int indexIteration) {
-		GameObject oldCharacter = playerCharacters[characterFocusIndex];
-		
 		characterFocusIndex = characterFocusIndex + indexIteration;
 		
 		if (characterFocusIndex >= playerCharacters.Count)
 			characterFocusIndex = 0;
 		else if (characterFocusIndex < 0)
-			characterFocusIndex = playerCharacters.Count - 1;
-		
-		if (oldCharacter != FocusedCharacter())
-			cameraMovement.SnapToCharacter(oldCharacter, FocusedCharacter());
+			characterFocusIndex = playerCharacters.Count - 1;		
 	}
 
 	public GameObject FocusedCharacter() {

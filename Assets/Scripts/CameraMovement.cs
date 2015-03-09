@@ -16,6 +16,7 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	void Update () {
+		SnapToCharacter(boardManager.FocusedCharacter());
 	}
 
 	private void SetInitialPosition () {
@@ -29,7 +30,7 @@ public class CameraMovement : MonoBehaviour {
 		transform.parent = boardManager.FocusedCharacter().transform;
 	}
 	
-	public void SnapToCharacter(GameObject oldCharacter, GameObject newCharacter) {
+	public void SnapToCharacter(GameObject newCharacter) {
 		transform.parent = newCharacter.transform;
 
 		StopCoroutine ("SmoothCameraMovement");
