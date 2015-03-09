@@ -20,19 +20,15 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	private void SetInitialPosition () {
-		transform.position = Vector3.zero;
 		transform.position = boardManager.FocusedCharacter().transform.position + relativePosition;
 		
 		Vector3 lookDirection = boardManager.FocusedCharacter().transform.position - transform.position;
 		Quaternion rotation = Quaternion.LookRotation(lookDirection);
 		
 		transform.rotation = rotation;
-		transform.parent = boardManager.FocusedCharacter().transform;
 	}
 	
 	public void SnapToCharacter(GameObject newCharacter) {
-		transform.parent = newCharacter.transform;
-
 		StopCoroutine ("SmoothCameraMovement");
 		StartCoroutine ("SmoothCameraMovement", newCharacter);
 	}
