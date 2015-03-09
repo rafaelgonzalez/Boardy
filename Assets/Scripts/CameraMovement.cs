@@ -16,38 +16,20 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	void Update () {
-		if (Input.GetButtonDown("Next character"))
-			ChangeCharacterFocus(1);
-		else if (Input.GetButtonDown("Previous character"))
-			ChangeCharacterFocus(-1);
 	}
 
 	private void SetInitialPosition () {
 		transform.position = Vector3.zero;
-		transform.position = CurrentCharacter().transform.position + relativePosition;
+		transform.position = boardManager.FocusedCharacter().transform.position + relativePosition;
 		
-		Vector3 lookDirection = CurrentCharacter().transform.position - transform.position;
+		Vector3 lookDirection = boardManager.FocusedCharacter().transform.position - transform.position;
 		Quaternion rotation = Quaternion.LookRotation(lookDirection);
 		
 		transform.rotation = rotation;
-		transform.parent = CurrentCharacter().transform;
+		transform.parent = boardManager.FocusedCharacter().transform;
 	}
-
-	private void ChangeCharacterFocus(int indexChange) {
-		GameObject oldCharacter = boardManager.playerCharacters[cameraFocusIndex];
-
-		cameraFocusIndex = cameraFocusIndex + indexChange;
-
-		if (cameraFocusIndex >= boardManager.playerCharacters.Count)
-			cameraFocusIndex = 0;
-		else if (cameraFocusIndex < 0)
-			cameraFocusIndex = boardManager.playerCharacters.Count - 1;
-
-		if (oldCharacter != CurrentCharacter())
-			SnapToCharacter(oldCharacter, CurrentCharacter());
-	}
-
-	private void SnapToCharacter(GameObject oldCharacter, GameObject newCharacter) {
+	
+	public void SnapToCharacter(GameObject oldCharacter, GameObject newCharacter) {
 		transform.parent = newCharacter.transform;
 
 		StopCoroutine ("SmoothCameraMovement");
@@ -68,9 +50,5 @@ public class CameraMovement : MonoBehaviour {
 			
 			yield return null;
 		}
-	}
-
-	private GameObject CurrentCharacter() {
-		return boardManager.playerCharacters[cameraFocusIndex];
 	}
 }
