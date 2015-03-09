@@ -13,7 +13,7 @@ public class BoardManager : MonoBehaviour {
 	public int columns = 10;
 	public int rows = 10;
 
-	public int numberOfPlayerCharacters = 5;
+	public int charactersToSpawn = 5;
 	public List<GameObject> playerCharacters = new List<GameObject>();
 
 	private List<Vector3> wallPositions = new List<Vector3>();
@@ -87,7 +87,7 @@ public class BoardManager : MonoBehaviour {
 	}
 
 	void SpawnPlayerCharacters() {
-		for (int i = 0; i < numberOfPlayerCharacters; i++) {
+		for (int i = 0; i < charactersToSpawn; i++) {
 			Vector3 position = RandomAvailablePosition();
 
 			GameObject character = Instantiate(playerPrefab, position, Quaternion.identity) as GameObject;
