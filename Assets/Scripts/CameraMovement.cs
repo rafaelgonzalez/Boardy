@@ -8,7 +8,6 @@ public class CameraMovement : MonoBehaviour {
 
 	private int cameraFocusIndex = 0;
 	private BoardManager boardManager;
-	private bool isMoving = false;
 
 	void Start () {
 		boardManager = transform.parent.GetComponent<BoardManager>();
@@ -17,12 +16,10 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	void Update () {
-		if (!isMoving) {
-			if (Input.GetButtonDown("Next character"))
-				ChangeCharacterFocus(1);
-			else if (Input.GetButtonDown("Previous character"))
-				ChangeCharacterFocus(-1);
-		}
+		if (Input.GetButtonDown("Next character"))
+			ChangeCharacterFocus(1);
+		else if (Input.GetButtonDown("Previous character"))
+			ChangeCharacterFocus(-1);
 	}
 
 	private void SetInitialPosition () {
@@ -53,12 +50,11 @@ public class CameraMovement : MonoBehaviour {
 	private void SnapToCharacter(GameObject oldCharacter, GameObject newCharacter) {
 		transform.parent = newCharacter.transform;
 
-		StartCoroutine (SmoothMovement (newCharacter));
+		StopCoroutine ("SmoothCameraMovement");
+		StartCoroutine ("SmoothCameraMovement", newCharacter);
 	}
 
-	IEnumerator SmoothMovement (GameObject character) {
-		isMoving = true;
-
+	IEnumerator SmoothCameraMovement (GameObject character) {
 		Vector3 destination = Vector3.zero + character.transform.position + relativePosition;
 		float sqrRemainingDistance = (transform.position - destination).sqrMagnitude;
 		
@@ -72,8 +68,6 @@ public class CameraMovement : MonoBehaviour {
 			
 			yield return null;
 		}
-		
-		isMoving = false;
 	}
 
 	private GameObject CurrentCharacter() {
