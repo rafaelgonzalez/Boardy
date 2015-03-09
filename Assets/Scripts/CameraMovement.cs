@@ -19,7 +19,7 @@ public class CameraMovement : MonoBehaviour {
 		SnapToCharacter(boardManager.FocusedCharacter());
 	}
 
-	private void SetInitialPosition () {
+	void SetInitialPosition () {
 		transform.position = boardManager.FocusedCharacter().transform.position + relativePosition;
 		
 		Vector3 lookDirection = boardManager.FocusedCharacter().transform.position - transform.position;
@@ -28,7 +28,7 @@ public class CameraMovement : MonoBehaviour {
 		transform.rotation = rotation;
 	}
 	
-	public void SnapToCharacter(GameObject newCharacter) {
+	void SnapToCharacter(GameObject newCharacter) {
 		StopCoroutine ("SmoothCameraMovement");
 		StartCoroutine ("SmoothCameraMovement", newCharacter);
 	}
