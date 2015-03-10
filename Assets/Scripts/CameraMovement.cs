@@ -4,7 +4,7 @@ using System.Collections;
 public class CameraMovement : MonoBehaviour {
 
 	public float moveSpeed = 5.0f;
-
+	public float rotateSpeed = 100.0f;
 	private int cameraFocusIndex = 0;
 	private BoardManager boardManager;
 	private bool isRotating = false;
@@ -59,13 +59,14 @@ public class CameraMovement : MonoBehaviour {
 		else if (orientationIndex < 0)
 			orientationIndex = System.Enum.GetValues(typeof(Orientation)).Length - 1;
 
-		transform.RotateAround(boardManager.FocusedCharacter().transform.position, Vector3.up, angle);
 		orientation = (Orientation) orientationIndex;
 
-//		StartCoroutine ("SmoothCameraRotation");
+		StartCoroutine ("SmoothCameraRotation");
 	}
 
 	IEnumerator SmoothCameraMovement (GameObject character) {
+		isRotating = true;
+
 		Vector3 destination = Vector3.zero + character.transform.position + relativePosition();
 		float sqrRemainingDistance = (transform.position - destination).sqrMagnitude;
 		
@@ -78,26 +79,37 @@ public class CameraMovement : MonoBehaviour {
 			
 			yield return null;
 		}
+
+		isRotating = false;
 	}
 
-//	IEnumerator SmoothCameraRotation () {
-////		isRotating = true;
-//
-//		Vector3 lookDirection = boardManager.FocusedCharacter().transform.position - transform.position;
-//    	Quaternion lookRotation = Quaternion.LookRotation(lookDirection);
-//    
-//		while (transform.rotation != lookRotation) {
-//			Quaternion rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * moveSpeed);
-//			transform.rotation = rotation;
-//      
-//		    yield return null;
-//		}
-//
-////		isRotating = false;
-//	}
+	IEnumerator SmoothCameraRotation () {
+		isRotating = true;
 
+		Vector3 destination = Vector3.zero + boardManager.FocusedCharacter().transform.position + relativePosition();
+
+		float sqrRemainingDistance = (transform.position - destination).sqrMagnitude;
+
+	    while (sqrRemainingDistance > 0.1f) {
+			Vector3 newPosition = Vector3.Lerp(transform.position, destination, Time.deltaTime * moveSpeed);
+			transform.position = newPosition;
+      
+      		Vector3 lookDirection = boardManager.FocusedCharacter().transform.position - transform.position;
+			Quaternion lookRotation = Quaternion.LookRotation(lookDirection);
+
+      		Quaternion rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime * rotateSpeed);
+			transform.rotation = rotation;
+      
+      		sqrRemainingDistance = (transform.position - destination).sqrMagnitude;
+
+		    yield return null;
+		}
+
+		isRotating = false;
+	}
+	
 	Vector3 relativePosition() {
-		Vector3 vector = Vector3.zero;
+    	Vector3 vector = Vector3.zero;
 
 		if (orientation == Orientation.North)
 			vector = new Vector3(0, 7, -7);
