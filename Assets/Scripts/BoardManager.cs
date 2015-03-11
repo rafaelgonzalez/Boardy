@@ -97,6 +97,7 @@ public class BoardManager : MonoBehaviour {
 			Vector3 position = RandomAvailablePosition();
 
 			GameObject character = Instantiate(playerPrefab, position, Quaternion.identity) as GameObject;
+			character.transform.parent = transform;
 
 			playerCharacters.Add(character);
 		}
